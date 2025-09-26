@@ -6,4 +6,5 @@ use (
     usrsvc
     dogalarm
     dogapm
+    protos
 )
