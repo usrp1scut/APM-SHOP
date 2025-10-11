@@ -14,10 +14,13 @@ type GrpcServer struct {
 
 func NewGrpcServer(addr string) *GrpcServer {
 	svc := grpc.NewServer(grpc.UnaryInterceptor(unaryServerInterceptor()))
-	return &GrpcServer{
+	server := &GrpcServer{
 		Server: svc,
 		addr:   addr,
 	}
+	globalClosers = append(globalClosers, server)
+	globalStarters = append(globalStarters, server)
+	return server
 }
 
 func (g *GrpcServer) Start() {
@@ -31,6 +34,10 @@ func (g *GrpcServer) Start() {
 			panic(err)
 		}
 	}()
+}
+
+func (g *GrpcServer) Close() {
+	g.Server.GracefulStop()
 }
 
 func unaryServerInterceptor() grpc.UnaryServerInterceptor {

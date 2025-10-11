@@ -1,10 +1,12 @@
-go 1.24
+go 1.24.0
+
+toolchain go1.24.5
 
 use (
-    ordersvc
-    skusvc
-    usrsvc
-    dogalarm
-    dogapm
-    protos
+	dogalarm
+	dogapm
+	ordersvc
+	protos
+	skusvc
+	usrsvc
 )

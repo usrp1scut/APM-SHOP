@@ -13,7 +13,10 @@ type HttpServer struct {
 func NewHttpServer(addr string) *HttpServer {
 	mux := http.NewServeMux()
 	server := &http.Server{Addr: addr, Handler: mux}
-	return &HttpServer{mux: mux, Server: server}
+	s := &HttpServer{mux: mux, Server: server}
+	globalClosers = append(globalClosers, s)
+	globalStarters = append(globalStarters, s)
+	return s
 }
 
 func (h *HttpServer) Handle(pattern string, handler http.Handler) {
@@ -33,6 +36,6 @@ func (h *HttpServer) Start() {
 	}()
 }
 
-func (h *HttpServer) Close() error {
-	return h.Shutdown(context.TODO())
+func (h *HttpServer) Close() {
+	h.Shutdown(context.TODO())
 }

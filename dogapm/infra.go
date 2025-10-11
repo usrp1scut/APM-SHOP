@@ -33,11 +33,11 @@ func InfraDbOption(connectUrl string) InfraOption {
 
 func InfraRdsOption(addr string) InfraOption {
 	return func(i *infra) {
-		rdb := redis.NewClient(&redis.Options{
+		i.Rdb = redis.NewClient(&redis.Options{
 			Addr: addr,
 			DB:   0,
 		})
-		res, err := rdb.Ping(context.TODO()).Result()
+		res, err := i.Rdb.Ping(context.TODO()).Result()
 		if err != nil {
 			panic(err)
 		}
